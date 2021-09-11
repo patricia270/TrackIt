@@ -16,7 +16,7 @@ export default function Register() {
     const [image, setImage] = useState("");
     const [responseVerification, setResponseVerification] = useState(null);
     const [disabled, setDisabled] = useState(false)
-    const [buttonContent, setButtonContent] = useState("Entrar")
+    const [buttonContent, setButtonContent] = useState("Cadastrar")
 
     const history = useHistory();
 

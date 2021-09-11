@@ -1,7 +1,5 @@
 
 import TopBar from "../topbar/TopBar";
-import { HabitsContent } from "../habits/Habits";
-import { Habit } from "../habits/WithHabits";
 import styled from "styled-components";
 import Footer from "../footer/Footer";
 
