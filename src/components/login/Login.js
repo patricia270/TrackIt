@@ -40,10 +40,6 @@ export default function Login({loginResponse, setLoginResponse}) {
             
     }
 
-    console.log(loginResponse);
-
-
-
     return (
         <Form onSubmit={start}>
             <Logotype src={Logo} alt="Logo" />

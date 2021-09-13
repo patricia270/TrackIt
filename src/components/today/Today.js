@@ -16,7 +16,6 @@ export default function Today() {
 
     const [userHabitsToday, setUserHabitsToday] = useState([]);
 
-    // console.log(data)
     const {
         loginResponse
     } = useContext(UserContext);
@@ -37,8 +36,6 @@ export default function Today() {
     }
 
     useEffect(showHabitsToday, []);
-
-    console.log(userHabitsToday)
 
     const habitsDone = userHabitsToday.filter((habit) => habit.done);
     setProgress(data.length > 0 ? (habitsDone.length/data.length*100).toFixed(0) : "0")
@@ -61,17 +58,12 @@ export default function Today() {
     );
 }
 
-// function HabitSituation () {
-//     return ();
-// }
-
-
-export const SituationHabitsContent = styled.div`
+const SituationHabitsContent = styled.div`
     padding: 98px 18px 0 17px;
     margin-bottom: 90px;
 `;
 
-export const Span = styled.span`
+const Span = styled.span`
     color: ${({habitsDone}) => habitsDone.length > 0 ? "#8FC549" : "#BABABA"};
     font-size: 17.98px;
     position: absolute;
@@ -80,7 +72,7 @@ export const Span = styled.span`
     margin-bottom: 50px;
 `;
 
-export const Date = styled.h2`
+const Date = styled.h2`
     color: #126BA5;
     font-size: 22.98px;
     margin-bottom: 50px;

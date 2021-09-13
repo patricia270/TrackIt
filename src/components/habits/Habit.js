@@ -35,10 +35,10 @@ export default function HabitUser({habit, weekdays, showHabits}) {
               label: "Sim",
               onClick: () => deleteHabit(id, config)
                                 .then(resp => {
-                                    console.log("sucess");
+                                    console.log("OK");
                                     showHabits();
                                 })
-                                .catch(err => {alert("errr")})
+                                .catch(err => {alert("erro!")})
             },
             {
               label: "Não"

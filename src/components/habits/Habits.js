@@ -18,7 +18,6 @@ export default function Habits() {
     const [reset, setReset] = useState(false);
 
     const [habitoCriado, setHabitoCriado] = useState([])
-    console.log(habitoCriado);
 
     const weekdays = [
         {
@@ -57,10 +56,8 @@ export default function Habits() {
     function openHabitCreationForm() {
         if (habitCreationForm === false) {
              setHabitCreationForm(true)
-             console.log("entrou")
         } else {
             setHabitCreationForm(false)
-            console.log("saiu")
         }
     }
 
@@ -76,13 +73,10 @@ export default function Habits() {
 
     function create() {
     
-            console.log(config)
-    
             const body = {
                 name,
                 days
             }
-            console.log(body);
     
             createHabit(config, body)
                 .then(resp => {
@@ -115,8 +109,6 @@ export default function Habits() {
     }
 
     useEffect(showHabits, [])
-
-    console.log(habitsArray)
 
 
     return (
@@ -160,20 +152,13 @@ function Weekday({weekday, index, setDays, days, disabled, setDisabled}) {
     function select() {
         if (selected === false) {
             setSelected(true);
-            setDays([...days, weekday.id])
-
-            console.log("entrou")
-            
+            setDays([...days, weekday.id])            
         } else {
             setSelected(false);
             setDays(days.filter(day => day !== weekday.id))
-            console.log("saiu")
-            console.log(selected)
         }
     }
 
-    console.log(`este é o disabled dos botõezinhos ${disabled}`)
-    // console.log(days)
     return (
         <Day key={index} onClick={select} selected={selected} disabled={disabled}>{weekday.name}</Day>
     );

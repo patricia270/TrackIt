@@ -16,7 +16,7 @@ export default function TopBar() {
 }
 
 
-export const ComponentTopBar = styled.header`
+const ComponentTopBar = styled.header`
     height: 70px;
     background-color: #126BA5;
     position: fixed;
@@ -31,12 +31,12 @@ export const ComponentTopBar = styled.header`
     z-index: 1; 
 `;
 
-export const LogotypeTopBar = styled.img`
+const LogotypeTopBar = styled.img`
     width: 97px;
     height: 49px;
 `;
 
-export const ProfileImg = styled.img`
+const ProfileImg = styled.img`
     width: 51px;
     height: 51px;
     border-radius: 50%;

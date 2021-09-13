@@ -5,7 +5,6 @@ import Login from "./components/login/Login";
 import Register from "./components/register/Register";
 import Habits from "./components/habits/Habits";
 import Today from "./components/today/Today";
-import Today2 from "./components/today/Today2";
 import Historic from "./components/historic/Historic";
 import UserContext from "./contexts/UserContext";
 import ProgressContext from "./contexts/ProgressContext";
@@ -31,9 +30,6 @@ function App() {
         </Route>
         <Route path="/today">
           <Today />
-        </Route>
-        <Route path="/today2">
-          <Today2 />
         </Route>
         <Route path="/historic">
           <Historic />
