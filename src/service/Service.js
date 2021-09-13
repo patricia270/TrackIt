@@ -23,11 +23,17 @@ function listHabits (config) {
 function deleteHabit (id, config) {
     return axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, config)
 }
+
+function habitState (type, id, config) {
+    return axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/${type}`, {}, config)
+}
+
 export {
     postRegistration,
     postForLogin,
     listHabitsToday,
     createHabit,
     listHabits,
-    deleteHabit
+    deleteHabit,
+    habitState
 }

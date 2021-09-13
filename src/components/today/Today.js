@@ -2,56 +2,58 @@ import TopBar from "../topbar/TopBar";
 import styled from "styled-components";
 import Footer from "../footer/Footer";
 import UserContext from "../../contexts/UserContext";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { listHabitsToday } from "../../service/Service";
 import dayjs from "dayjs";
-import 'dayjs/locale/pt-br'
-
+import 'dayjs/locale/pt-br';
+import HabitSituation from "./HabitSituation";
+import ProgressContext from "../../contexts/ProgressContext";
 
 export default function Today() {
     const data = dayjs()
     .locale('pt-br')
     .format("dddd, DD/MM");
 
+    const [userHabitsToday, setUserHabitsToday] = useState([]);
+
     // console.log(data)
     const {
         loginResponse
     } = useContext(UserContext);
 
-    useEffect(() => {
+    const {
+        setProgress
+    } = useContext(ProgressContext);
+
+
+    function showHabitsToday() {
         const config = {
             headers: {
                 Authorization: `Bearer ${loginResponse.token}`
             }
         }
-
-        // console.log(config)
-
         listHabitsToday(config)
-        .then(resp => {
-            console.log(resp.data)
-        })
-    
-    }, []);
+        .then(resp => {setUserHabitsToday(resp.data)})
+    }
+
+    useEffect(showHabitsToday, []);
+
+    console.log(userHabitsToday)
+
+    const habitsDone = userHabitsToday.filter((habit) => habit.done);
+    setProgress(data.length > 0 ? (habitsDone.length/data.length*100).toFixed(0) : "0")
 
     return (
         <>
             <TopBar />
             <SituationHabitsContent>
                 <Date>{data}</Date>
-                <Span>Nenhum hábito concluído ainda</Span>
-                <HabitSituation>
-                    <HabitTitle>Ler 1 capítulo de livro</HabitTitle>
-                    <button></button>
-                    <Records>Sequência atual: 3 dias</Records>
-                    <Records>Seu recorde: 5 dias</Records>
-                </HabitSituation>
-                <HabitSituation>
-                    <HabitTitle>Ler 1 capítulo de livro</HabitTitle>
-                    <button></button>
-                    <Records>Sequência atual: 3 dias</Records>
-                    <Records>Seu recorde: 5 dias</Records>
-                </HabitSituation>
+                <Span habitsDone={habitsDone}>{userHabitsToday.length === 0 ? "Você não possui hábitos para hoje" : habitsDone.length > 0 ? `${(habitsDone.length/userHabitsToday.length*100).toFixed(0)}% dos hábitos concluídos` : "Nenhum hábito concluído ainda" }</Span>
+                {userHabitsToday.length === 0 ? "" :
+                    userHabitsToday.map((habit) => (
+                        <HabitSituation habit={habit} key={habit.id} showHabitsToday={showHabitsToday} />
+                    ))            
+                }
             </SituationHabitsContent>
             <Footer />
 
@@ -59,14 +61,18 @@ export default function Today() {
     );
 }
 
+// function HabitSituation () {
+//     return ();
+// }
+
 
 export const SituationHabitsContent = styled.div`
     padding: 98px 18px 0 17px;
-    height: 100vh;
+    margin-bottom: 90px;
 `;
 
 export const Span = styled.span`
-    color: #BABABA;
+    color: ${({habitsDone}) => habitsDone.length > 0 ? "#8FC549" : "#BABABA"};
     font-size: 17.98px;
     position: absolute;
     top: calc(70px + 57px);
@@ -78,34 +84,4 @@ export const Date = styled.h2`
     color: #126BA5;
     font-size: 22.98px;
     margin-bottom: 50px;
-`;
-
-export const HabitSituation = styled.div`
-    width: 340px;
-    height: 94px;
-    background-color: #FFFFFF;
-    border-radius: 5px;
-    padding: 13px 11px 0 17px;
-    margin-bottom: 10px;
-    position: relative;
-    button {
-        width: 69px;
-        height: 69px;
-        background-color: #EBEBEB;
-        position: absolute;
-        top: 13px;
-        right: 13px;
-    }
-`;
-
-export const HabitTitle = styled.h3`
-    font-size: 19.98px;
-    margin-bottom: 8px;
-    color: #666666;
-`;
-
-export const Records = styled.h4`
-    font-size: 12.98px;
-    color: #666666;
-
 `;

@@ -30,7 +30,7 @@ export default function Login({loginResponse, setLoginResponse}) {
                 history.push("/today")       
             })
             .catch(err => {
-                alert("Ocorreu um erro durante a operação");
+                alert("Verifique se os dados foram digitados corretamente");
                 setDisabled(false)}
             ) 
 
@@ -47,8 +47,8 @@ export default function Login({loginResponse, setLoginResponse}) {
     return (
         <Form onSubmit={start}>
             <Logotype src={Logo} alt="Logo" />
-            <Input type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={disabled}></Input>
-            <Input type="password" placeholder="senha" value={password} onChange={(e) => setPassword(e.target.value)} disabled={disabled}></Input>
+            <Input type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={disabled} required></Input>
+            <Input type="password" placeholder="senha" value={password} onChange={(e) => setPassword(e.target.value)} disabled={disabled} required></Input>
             <Button type="submit"> {disabled ? 
                 <Loader
                     type="ThreeDots"

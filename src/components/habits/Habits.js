@@ -15,7 +15,7 @@ export default function Habits() {
     const [disabled, setDisabled] = useState(false)
 
     const [habitsArray, setHabitsArray] = useState("");
-
+    const [reset, setReset] = useState(false);
 
     const [habitoCriado, setHabitoCriado] = useState([])
     console.log(habitoCriado);
@@ -75,7 +75,6 @@ export default function Habits() {
     }
 
     function create() {
-        setDisabled(true)
     
             console.log(config)
     
@@ -92,10 +91,14 @@ export default function Habits() {
                     openHabitCreationForm();
                     setName("");
                     setDays([]);
+                    setReset(true);
+                    setTimeout(() => {
+                        setReset(false);
+                    }, 0)
                     
             })
                 .catch(err => {
-                    alert("Erro!");
+                    alert("Preencha os campos");
                     setDisabled(false);
                 })
     }
@@ -123,9 +126,9 @@ export default function Habits() {
                 <h2>Meus hábitos</h2>
                 <AddHabitButton onClick={openHabitCreationForm}>+</AddHabitButton>
                 <AddHabitBox habitCreationForm={habitCreationForm}>
-                    <Input placeholder="nome do hábito" value={name} onChange={(e) => setName(e.target.value)} disabled={disabled}></Input>
+                    <Input placeholder="nome do hábito" value={name} onChange={(e) => setName(e.target.value)} disabled={disabled} required></Input>
                     <Weekdays>
-                        {weekdays.map((weekday, index) => (<Weekday key={index} weekday={weekday} index={index} setDays={setDays} days={days} setDisabled={setDisabled} disabled={disabled}/>))}
+                        {!reset ? weekdays.map((weekday, index) => (<Weekday key={index} weekday={weekday} index={index} setDays={setDays} days={days} setDisabled={setDisabled} disabled={disabled}/>)) : ""}
                     </Weekdays>
                     <h5 onClick={() => openHabitCreationForm()}>Cancelar</h5>
                     <SaveButton onClick={create} disabled={disabled}>{ disabled ? 
@@ -140,7 +143,7 @@ export default function Habits() {
                 </AddHabitBox>
                     {habitsArray.length === 0 ? 
                         <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p> :
-                        habitsArray.map((habit, index) => (
+                        habitsArray.map((habit) => (
                             <HabitUser habit={habit} key={habit.id} showHabits={showHabits} weekdays={weekdays} />
                         )) 
                     }

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Trackit from "./trackit.svg";
 import UserContext from "../../contexts/UserContext";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 export default function TopBar() {
 
     const {

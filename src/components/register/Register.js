@@ -47,10 +47,10 @@ export default function Register() {
     return (
         <Form onSubmit={registration}>
             <Logotype src={Logo} alt="Logo" />
-            <Input type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={disabled}></Input>
-            <Input type="password" placeholder="senha" value={password} onChange={(e) => setPassword(e.target.value)} disabled={disabled}></Input>
-            <Input type="text" placeholder="nome" value={name} onChange={(e) => setName(e.target.value)} disabled={disabled}></Input>
-            <Input type="url" placeholder="foto" value={image} onChange={(e) => setImage(e.target.value)} disabled={disabled}></Input>
+            <Input type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={disabled} required></Input>
+            <Input type="password" placeholder="senha" value={password} onChange={(e) => setPassword(e.target.value)} disabled={disabled} required></Input>
+            <Input type="text" placeholder="nome" value={name} onChange={(e) => setName(e.target.value)} disabled={disabled} required></Input>
+            <Input type="url" placeholder="foto" value={image} onChange={(e) => setImage(e.target.value)} disabled={disabled} required></Input>
             <Button type="submit" disabled={disabled}>{ disabled ? 
                 <Loader
                     type="ThreeDots"
