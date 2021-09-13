@@ -8,13 +8,16 @@ import Today from "./components/today/Today";
 import Today2 from "./components/today/Today2";
 import Historic from "./components/historic/Historic";
 import UserContext from "./contexts/UserContext";
+import ProgressContext from "./contexts/ProgressContext";
 import { useState } from "react";
 
 function App() {
   const [loginResponse, setLoginResponse] = useState(null);
+  const [progress, setProgress] = useState("60");
 
   return (
     <UserContext.Provider value={{loginResponse, setLoginResponse}}>
+    <ProgressContext.Provider value={{progress, setProgress}}>  
     <BrowserRouter>
       <Switch>
         <Route path="/" exact>
@@ -38,8 +41,8 @@ function App() {
       </Switch>
       <GlobalStyle />
     </BrowserRouter>
-    </UserContext.Provider>
-    
+    </ProgressContext.Provider>
+    </UserContext.Provider>    
   );
 }
 

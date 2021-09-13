@@ -1,13 +1,16 @@
 import styled from "styled-components";
 import Trackit from "./trackit.svg";
-
+import UserContext from "../../contexts/UserContext";
+import { useContext, useEffect } from "react";
 export default function TopBar() {
 
-   
+    const {
+        loginResponse
+    } = useContext(UserContext);
     return (
         <ComponentTopBar>
             <LogotypeTopBar src={Trackit} alt="Logo TrackIt" />
-            <ProfileImg src="" alt="Imagem de perfil" />
+            <ProfileImg src={loginResponse.image} alt="Imagem de perfil" />
         </ComponentTopBar>
     );
 }
