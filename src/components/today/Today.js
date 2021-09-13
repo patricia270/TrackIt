@@ -1,14 +1,44 @@
-
 import TopBar from "../topbar/TopBar";
 import styled from "styled-components";
 import Footer from "../footer/Footer";
+import UserContext from "../../contexts/UserContext";
+import { useContext, useEffect } from "react";
+import { listHabitsToday } from "../../service/Service";
+import dayjs from "dayjs";
+import 'dayjs/locale/pt-br'
+
 
 export default function Today() {
+    const data = dayjs()
+    .locale('pt-br')
+    .format("dddd, DD/MM");
+
+    // console.log(data)
+    const {
+        loginResponse
+    } = useContext(UserContext);
+
+    useEffect(() => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${loginResponse.token}`
+            }
+        }
+
+        // console.log(config)
+
+        listHabitsToday(config)
+        .then(resp => {
+            console.log(resp.data)
+        })
+    
+    }, []);
+
     return (
         <>
             <TopBar />
             <SituationHabitsContent>
-                <Date>Segunda, 17/05</Date>
+                <Date>{data}</Date>
                 <Span>Nenhum hábito concluído ainda</Span>
                 <HabitSituation>
                     <HabitTitle>Ler 1 capítulo de livro</HabitTitle>
@@ -31,7 +61,6 @@ export default function Today() {
 
 
 export const SituationHabitsContent = styled.div`
-    background-color: #E5E5E5;
     padding: 98px 18px 0 17px;
     height: 100vh;
 `;

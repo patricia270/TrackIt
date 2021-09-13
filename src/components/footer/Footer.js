@@ -1,9 +1,9 @@
-
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 export default function Footer() {
     return (
         <FooterComponent>
-            <p>Hábitos</p>
+            <Link to="/habits">Hábitos</Link>
             <p>Histórico</p>
         </FooterComponent>
     );

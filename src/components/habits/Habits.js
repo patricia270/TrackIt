@@ -2,45 +2,186 @@ import styled from "styled-components";
 import { Input } from "../../styles/GlobalStyle";
 import TopBar from "../topbar/TopBar";
 import Footer from "../footer/Footer";
+import { useState, useEffect } from "react";
+import { useContext } from "react";
+import UserContext from "../../contexts/UserContext";
+import { createHabit } from "../../service/Service";
+import { listHabits } from "../../service/Service";
+import HabitUser from "./Habit";
+import Loader from "react-loader-spinner";
 
 export default function Habits() {
+    const [name, setName] = useState("");
+    const [disabled, setDisabled] = useState(false)
+
+    const [habitsArray, setHabitsArray] = useState("");
+
+
+    const [habitoCriado, setHabitoCriado] = useState([])
+    console.log(habitoCriado);
+
+    const weekdays = [
+        {
+            name: "D",
+            id: 0
+        },
+        {
+            name: "S",
+            id: 1
+        },
+        {
+            name: "T",
+            id: 2
+        },
+        {
+            name: "Q",
+            id: 3
+        },
+        {
+            name: "Q",
+            id: 4
+        },
+        {
+            name: "S",
+            id: 5
+        },
+        {
+            name: "S",
+            id: 6
+        },
+    ]
+    const [habitCreationForm, setHabitCreationForm] = useState(false);
+    const [days, setDays] = useState([]);
+
+
+    function openHabitCreationForm() {
+        if (habitCreationForm === false) {
+             setHabitCreationForm(true)
+             console.log("entrou")
+        } else {
+            setHabitCreationForm(false)
+            console.log("saiu")
+        }
+    }
+
+    const {
+        loginResponse
+    } = useContext(UserContext);
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${loginResponse.token}`
+        }
+    }
+
+    function create() {
+        setDisabled(true)
+    
+            console.log(config)
+    
+            const body = {
+                name,
+                days
+            }
+            console.log(body);
+    
+            createHabit(config, body)
+                .then(resp => {
+                    setHabitoCriado(resp.data);
+                    setDisabled(false);
+                    openHabitCreationForm();
+                    setName("");
+                    setDays([]);
+                    
+            })
+                .catch(err => {
+                    alert("Erro!");
+                    setDisabled(false);
+                })
+    }
+
+
+    function showHabits() {
+        listHabits(config)
+        .then(resp => {
+            setHabitsArray(resp.data)
+        })
+        .catch(err => {
+            alert("erro!")
+        });
+    }
+
+    useEffect(showHabits, [])
+
+    console.log(habitsArray)
+
+
     return (
         <>
             <TopBar />
             <HabitsContent>
                 <h2>Meus hábitos</h2>
-                <AddHabitButton>+</AddHabitButton>
-                <AddHabitBox>
-                    <Input placeholder="nome do hábito"></Input>
+                <AddHabitButton onClick={openHabitCreationForm}>+</AddHabitButton>
+                <AddHabitBox habitCreationForm={habitCreationForm}>
+                    <Input placeholder="nome do hábito" value={name} onChange={(e) => setName(e.target.value)} disabled={disabled}></Input>
                     <Weekdays>
-                        <Weekday>D</Weekday>
-                        
-                        <Weekday>S</Weekday>
-                        
-                        <Weekday>T</Weekday>
-                        
-                        <Weekday>Q</Weekday>
-                        
-                        <Weekday>Q</Weekday>
-                        
-                        <Weekday>S</Weekday>
-                       
-                        <Weekday>S</Weekday>
+                        {weekdays.map((weekday, index) => (<Weekday key={index} weekday={weekday} index={index} setDays={setDays} days={days} setDisabled={setDisabled} disabled={disabled}/>))}
                     </Weekdays>
-                    <a href="#">Cancelar</a>
-                    <SaveButton>Salvar</SaveButton>
+                    <h5 onClick={() => openHabitCreationForm()}>Cancelar</h5>
+                    <SaveButton onClick={create} disabled={disabled}>{ disabled ? 
+                        <Loader
+                            type="ThreeDots"
+                            color="white"
+                            height={30}
+                            width={60}
+                            timeout={3000}           
+                        /> : "Salvar"}
+                    </SaveButton>
                 </AddHabitBox>
-                <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
+                    {habitsArray.length === 0 ? 
+                        <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p> :
+                        habitsArray.map((habit, index) => (
+                            <HabitUser habit={habit} key={habit.id} showHabits={showHabits} weekdays={weekdays} />
+                        )) 
+                    }
             </HabitsContent>
             <Footer />
         </>
     );
 };
 
+
+function Weekday({weekday, index, setDays, days, disabled, setDisabled}) {
+    const [selected, setSelected] = useState(false)
+
+    function select() {
+        if (selected === false) {
+            setSelected(true);
+            setDays([...days, weekday.id])
+
+            console.log("entrou")
+            
+        } else {
+            setSelected(false);
+            setDays(days.filter(day => day !== weekday.id))
+            console.log("saiu")
+            console.log(selected)
+        }
+    }
+
+    console.log(`este é o disabled dos botõezinhos ${disabled}`)
+    // console.log(days)
+    return (
+        <Day key={index} onClick={select} selected={selected} disabled={disabled}>{weekday.name}</Day>
+    );
+}
+
+
+
 export const HabitsContent = styled.div`
-    background-color: #E5E5E5;
+
     padding: 98px 18px 0 17px;
-    height: 100vh;
+    margin-bottom: 80px;
     h2 {
         color: #126BA5;
         font-size: 22.98px;
@@ -76,7 +217,8 @@ export const AddHabitBox = styled.div`
     padding: 18px 19px 0 18px;
     margin-bottom: 29px;
     position: relative;
-    a {
+    display: ${({habitCreationForm}) => habitCreationForm === false ? "none" : "block" };
+    h5 {
         font-size: 15.98px;
         color: #52B6FF;
         position: absolute;
@@ -92,15 +234,15 @@ export const Weekdays = styled.div`
 `;
 
 
-export const Weekday = styled.button`
+export const Day = styled.button`
     width: 30px;
     height: 30px;
     border-radius: 5px;
     border: 1px solid #D4D4D4;
-    background-color: #FFFFFF;
+    background-color:  ${({selected}) => selected === false ? "#FFFFFF" : "#CFCFCF"};
     margin-left: 4px;
     font-size: 19.98px;
-    color: #DBDBDB;
+    color: ${({selected}) => selected === false ? "#DBDBDB" : "#FFFFFF"};
 `;
 
 export const SaveButton = styled.button`
@@ -114,3 +256,4 @@ export const SaveButton = styled.button`
     top: 130px;
     right: 16px;
 `;
+

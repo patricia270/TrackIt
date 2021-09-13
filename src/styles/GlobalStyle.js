@@ -6,6 +6,7 @@ const GlobalStyle = createGlobalStyle`
 
     * {
         box-sizing: border-box;
+        font-family: 'Lexend Deca', sans-serif;
     }
 
     /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -42,7 +43,7 @@ const GlobalStyle = createGlobalStyle`
     body {
         line-height: 1;
         font-family: 'Lexend Deca', sans-serif;
-        background-color: #ffffff;
+        background-color: #f2f2f2;
     }
     ol, ul {
         list-style: none;
@@ -88,6 +89,8 @@ const GlobalStyle = createGlobalStyle`
 
 export const Form = styled.form`
     display: flex;
+    background-color: #FFFFFF;
+    height: 100vh;
     flex-direction: column;
     align-items: center;
     a {

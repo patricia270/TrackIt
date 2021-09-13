@@ -8,12 +8,10 @@ import { useState } from "react";
 import { postForLogin } from "../../service/Service";
 import Loader from "react-loader-spinner";
 
-export default function Login() {
+export default function Login({loginResponse, setLoginResponse}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [disabled, setDisabled] = useState(false)
-    const [loginResponse, setLoginResponse] = useState(null);
-    const [buttonLoginContent, setButtonLoginContent] = useState("Entrar");
 
     const history = useHistory();
 
@@ -31,17 +29,13 @@ export default function Login() {
                 setLoginResponse(resp.data)
                 history.push("/today")       
             })
-            .catch(err => alert("Ocorreu um erro durante a operação")) 
+            .catch(err => {
+                alert("Ocorreu um erro durante a operação");
+                setDisabled(false)}
+            ) 
 
         if (loginResponse === null) {
-            return (setDisabled(true), setButtonLoginContent(<Loader
-                type="ThreeDots"
-                color="white"
-                height={60}
-                width={60}
-                timeout={3000}
-           
-                />));    
+            return setDisabled(true)
         }    
             
     }
@@ -55,7 +49,15 @@ export default function Login() {
             <Logotype src={Logo} alt="Logo" />
             <Input type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={disabled}></Input>
             <Input type="password" placeholder="senha" value={password} onChange={(e) => setPassword(e.target.value)} disabled={disabled}></Input>
-            <Button type="submit">{buttonLoginContent}</Button>
+            <Button type="submit"> {disabled ? 
+                <Loader
+                    type="ThreeDots"
+                    color="white"
+                    height={60}
+                    width={60}
+                    timeout={3000}           
+                /> : "Entrar"}
+            </Button>
             <Link to="/registration">Não tem uma conta? Cadastre-se!</Link>
         </Form >
     );
