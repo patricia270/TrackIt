@@ -86,6 +86,7 @@ export default function Habits() {
                     setName("");
                     setDays([]);
                     setReset(true);
+                    showHabits();
                     setTimeout(() => {
                         setReset(false);
                     }, 0)
